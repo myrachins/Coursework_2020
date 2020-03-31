@@ -14,6 +14,7 @@ import ru.hse.edu.myurachinskiy.models.DataContext;
 import ru.hse.edu.myurachinskiy.models.OriginalSeries;
 import ru.hse.edu.myurachinskiy.utils.AppSettings;
 import ru.hse.edu.myurachinskiy.utils.alerts.AlertFactory;
+import ru.hse.edu.myurachinskiy.utils.scenes.SceneMediator;
 
 import java.io.*;
 import java.net.URL;
@@ -75,7 +76,7 @@ public class SeriesSelectController implements Initializable {
     public void onDone(ActionEvent actionEvent) {
         String seriesName = numericColumnsComboBox.getValue();
         DataContext.originalSeries = new OriginalSeries(seriesName, numericColumnToData.get(seriesName));
-        // TODO: switch to next scene
+        SceneMediator.changeScene(this, actionEvent);
     }
 
     private void enableColumnSelection() {
