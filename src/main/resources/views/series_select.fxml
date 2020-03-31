@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ru.hse.edu.myurachinskiy.controllers.SeriesSelectController"
+            prefHeight="1000.0" prefWidth="1000.0" spacing="20">
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+    </padding>
+    <Label text="Choose file with CSV based data structure for further converting"
+           style="-fx-font: NORMAL 20 Tahoma;"/>
+    <HBox spacing="20">
+        <HBox>
+            <Button text="Choose file" onAction="#onSelectFile"/>
+            <TextField fx:id="fileNameTextField" text="File was not selected" editable="false"/>
+        </HBox>
+        <HBox>
+            <TextField text="Separator" prefWidth="80" editable="false" alignment="BASELINE_CENTER"/>
+            <ComboBox fx:id="separatorsComboBox"/>
+        </HBox>
+        <Button text="Load file" onAction="#onLoadFile"/>
+    </HBox>
+    <TableView fx:id="csvTableView"/>
+    <HBox alignment="BOTTOM_RIGHT" spacing="20">
+        <Label text="Choose column with numeric data for further symbolic-fuzzy representation"
+               style="-fx-font: NORMAL 17 Tahoma;"/>
+        <ComboBox fx:id="numericColumnsComboBox" disable="true"/>
+        <Button fx:id="doneButton" text="Done" onAction="#onDone" disable="true"/>
+    </HBox>
+</VBox>
