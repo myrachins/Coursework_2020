@@ -10,6 +10,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import ru.hse.edu.myurachinskiy.models.DataContext;
+import ru.hse.edu.myurachinskiy.models.OriginalSeries;
 import ru.hse.edu.myurachinskiy.utils.AppSettings;
 import ru.hse.edu.myurachinskiy.utils.alerts.AlertFactory;
 
@@ -71,6 +73,8 @@ public class SeriesSelectController implements Initializable {
     }
 
     public void onDone(ActionEvent actionEvent) {
+        String seriesName = numericColumnsComboBox.getValue();
+        DataContext.originalSeries = new OriginalSeries(seriesName, numericColumnToData.get(seriesName));
         // TODO: switch to next scene
     }
 
