@@ -24,6 +24,10 @@ public class OriginalSeries {
         this.series = series;
     }
 
+    public int getSeriesSize() {
+        return series.size();
+    }
+
     private String name;
     private List<Double> series;
 }

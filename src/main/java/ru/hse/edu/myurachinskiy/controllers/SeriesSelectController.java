@@ -56,8 +56,8 @@ public class SeriesSelectController implements Initializable {
                 }
                 csvRows.add(row);
             }
-            if (csvRows.size() < 2) {
-                throw new IllegalArgumentException("Table should have at least two rows with data");
+            if (csvRows.size() < 3) {
+                throw new IllegalArgumentException("Table should have at least three rows with data");
             }
             drawTable();
             enableColumnSelection();

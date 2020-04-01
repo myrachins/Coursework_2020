@@ -1,34 +1,33 @@
 package ru.hse.edu.myurachinskiy.models;
 
+import ru.hse.edu.myurachinskiy.utils.AppSettings;
+import ru.hse.edu.myurachinskiy.utils.characteristics.CharacteristicStrategy;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class LinguisticFuzzyValue {
-    public LinguisticFuzzyValue(String name) {
-        this(name, new ArrayList<>());
-    }
-
     public LinguisticFuzzyValue(String name, List<Double> distribution) {
         this.name = name;
-        this.distribution = distribution;
+        this.distribution = new ArrayList<>(distribution);
+        Collections.sort(this.distribution);
+        strategy = AppSettings.GET_CHARACTERISTIC_STRATEGY(this.distribution);
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public List<Double> getDistribution() {
-        return distribution;
+        return new ArrayList<>(distribution);
     }
 
-    public void setDistribution(List<Double> distribution) {
-        this.distribution = distribution;
+    public double applyCharacteristicFunction(double point) {
+        return strategy.applyCharacteristicFunction(point);
     }
 
     private String name;
     private List<Double> distribution;
+    private CharacteristicStrategy strategy;
 }
