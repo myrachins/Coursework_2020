@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import ru.hse.edu.myurachinskiy.utils.controls.LineChartWithRectangles?>
+<?import javafx.scene.chart.NumberAxis?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ru.hse.edu.myurachinskiy.controllers.LinguisticValuesSelectController"
+      prefHeight="400.0" prefWidth="600.0">
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+    </padding>
+    <Label text="Choose linguistic values for linguistic variable of series changes"
+           style="-fx-font: NORMAL 20 Tahoma;"/>
+
+    <LineChartWithRectangles fx:id="seriesLineChart" disable="true"
+                             onDragDetected="#onDragDetectedLineChart"
+                             onMouseReleased="#onMouseReleasedLineChart">
+        <xAxis>
+            <NumberAxis fx:id="xAxis" label="Time"/>
+        </xAxis>
+        <yAxis>
+            <NumberAxis fx:id="yAxis" side="LEFT"/>
+        </yAxis>
+    </LineChartWithRectangles>
+    <HBox>
+        <VBox>
+            <HBox>
+                <TextField fx:id="linguisticVariableTextField" />
+                <Button fx:id="addLinguisticVariableButton" text="Add" onAction="#onAddLinguisticVariable"/>
+                <Button fx:id="submitRegionsButton" text="Submit regions" onAction="#onSubmitRegions" disable="true"/>
+            </HBox>
+            <ListView fx:id="linguisticValuesListView"/>
+        </VBox>
+        <Button fx:id="doneButton" text="Done" disable="true" alignment="BOTTOM_RIGHT"/>
+    </HBox>
+</VBox>

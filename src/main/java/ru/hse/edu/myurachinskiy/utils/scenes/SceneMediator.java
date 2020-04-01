@@ -56,7 +56,7 @@ public class SceneMediator {
 
     private static Parent getNextScene(Initializable currentController) throws IOException {
         if (currentController instanceof SeriesSelectController) {
-            return loadScene("/views/series_select.fxml"); // TODO: change to linguistic variable selection
+            return loadScene("/views/linguistic_values_select.fxml");
         }
         throw new UnexpectedException("Controller \"" + currentController.toString() + "\" is not supported");
     }
