@@ -16,5 +16,13 @@ public class LinguisticFuzzySeries {
         values.add(value);
     }
 
+    public List<FuzzyAffiliation> getAffiliations(double point) {
+        List<FuzzyAffiliation> affiliations = new ArrayList<>();
+        for (LinguisticFuzzyValue value : values) {
+            affiliations.add(new FuzzyAffiliation(value.getName(), value.applyCharacteristicFunction(point)));
+        }
+        return affiliations;
+    }
+
     private List<LinguisticFuzzyValue> values;
 }

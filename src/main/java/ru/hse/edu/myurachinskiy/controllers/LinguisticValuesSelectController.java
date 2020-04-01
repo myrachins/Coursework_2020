@@ -19,6 +19,7 @@ import ru.hse.edu.myurachinskiy.models.LinguisticFuzzyValue;
 import ru.hse.edu.myurachinskiy.utils.AppSettings;
 import ru.hse.edu.myurachinskiy.utils.alerts.AlertFactory;
 import ru.hse.edu.myurachinskiy.utils.controls.LineChartWithRectangles;
+import ru.hse.edu.myurachinskiy.utils.scenes.SceneMediator;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -112,6 +113,10 @@ public class LinguisticValuesSelectController implements Initializable {
             Alert alert = AlertFactory.getErrorAlert("Selection error", "Selection error", e.getMessage());
             alert.show();
         }
+    }
+
+    public void onDone(ActionEvent actionEvent) {
+        SceneMediator.changeScene(this, actionEvent);
     }
 
     private Pair<Integer, Integer> getValidRegion(double startX, double endX) {

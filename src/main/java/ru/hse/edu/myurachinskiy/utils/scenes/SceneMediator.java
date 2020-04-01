@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import ru.hse.edu.myurachinskiy.controllers.LinguisticValuesSelectController;
 import ru.hse.edu.myurachinskiy.controllers.SeriesSelectController;
 import ru.hse.edu.myurachinskiy.utils.AppSettings;
 import ru.hse.edu.myurachinskiy.utils.alerts.AlertFactory;
@@ -57,6 +58,8 @@ public class SceneMediator {
     private static Parent getNextScene(Initializable currentController) throws IOException {
         if (currentController instanceof SeriesSelectController) {
             return loadScene("/views/linguistic_values_select.fxml");
+        } else if (currentController instanceof LinguisticValuesSelectController) {
+            return loadScene("/views/fuzzy_series_view.fxml");
         }
         throw new UnexpectedException("Controller \"" + currentController.toString() + "\" is not supported");
     }
