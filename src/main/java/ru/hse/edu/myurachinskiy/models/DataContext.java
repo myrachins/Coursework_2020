@@ -6,4 +6,5 @@ public class DataContext {
     private DataContext() { }
 
     public static OriginalSeries originalSeries;
+    public static LinguisticFuzzySeries linguisticFuzzySeries;
 }

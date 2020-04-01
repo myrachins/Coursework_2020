@@ -5,9 +5,9 @@
 <?import javafx.geometry.Insets?>
 
 <VBox xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="ru.hse.edu.myurachinskiy.controllers.SeriesSelectController"
-            prefHeight="1000.0" prefWidth="1000.0" spacing="20">
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ru.hse.edu.myurachinskiy.controllers.SeriesSelectController"
+      prefHeight="1000.0" prefWidth="1000.0" spacing="20">
     <padding>
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
     </padding>
