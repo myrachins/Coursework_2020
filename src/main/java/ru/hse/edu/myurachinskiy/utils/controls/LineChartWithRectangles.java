@@ -9,6 +9,7 @@ import javafx.scene.chart.Axis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import ru.hse.edu.myurachinskiy.utils.AppSettings;
 
 import java.util.Objects;
 
@@ -20,13 +21,13 @@ public class LineChartWithRectangles<X, Y> extends LineChart<X, Y> {
         verticalRangeMarkers.addListener((InvalidationListener) observable -> layoutPlotChildren());
     }
 
-    public void addVerticalRangeMarker(Data<X, X> marker) {
+    public void addVerticalRangeMarker(Data<X, X> marker, Color color) {
         Objects.requireNonNull(marker, "the marker must not be null");
         if (verticalRangeMarkers.contains(marker)) return;
 
         Rectangle rectangle = new Rectangle(0,0,0,0);
         rectangle.setStroke(Color.TRANSPARENT);
-        rectangle.setFill(Color.BLUE.deriveColor(1, 1, 1, 0.2));
+        rectangle.setFill(color.deriveColor(1, 1, 1, AppSettings.COLOR_OPACITY));
 
         marker.setNode(rectangle);
 

@@ -14,11 +14,11 @@
     <Label text="Choose file with CSV based data structure for further converting"
            style="-fx-font: NORMAL 20 Tahoma;"/>
     <HBox spacing="20">
-        <HBox>
+        <HBox spacing="5">
             <Button text="Choose file" onAction="#onSelectFile"/>
             <TextField fx:id="fileNameTextField" text="File was not selected" editable="false"/>
         </HBox>
-        <HBox>
+        <HBox spacing="5">
             <TextField text="Separator" prefWidth="80" editable="false" alignment="BASELINE_CENTER"/>
             <ComboBox fx:id="separatorsComboBox"/>
         </HBox>

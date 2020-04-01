@@ -4,14 +4,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.util.Pair;
 import ru.hse.edu.myurachinskiy.models.DataContext;
 import ru.hse.edu.myurachinskiy.models.LinguisticFuzzySeries;
@@ -48,6 +47,27 @@ public class LinguisticValuesSelectController implements Initializable {
         yAxis.setTickUnit((max - min) / AppSettings.AXIS_INTERVALS_NUMBER);
 
         DataContext.linguisticFuzzySeries = new LinguisticFuzzySeries();
+
+        allColors = new ArrayList<>();
+        linguisticValuesListView.setCellFactory(stringListView -> new ListCell<>(){
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setStyle(null);
+                } else {
+                    setText(item);
+                    int listIndex = getIndex();
+                    if (listIndex < allColors.size()) {
+                        Color color = allColors.get(getIndex());
+                        setStyle("-fx-background-color: " + String.format("#%02X%02X%02X%02X",
+                                (int)(color.getRed() * 255), (int)(color.getGreen() * 255),
+                                (int)(color.getBlue() * 255), (int)(AppSettings.COLOR_OPACITY * 255)) + ";");
+                    }
+                }
+            }
+        });
     }
 
     public void onDragDetectedLineChart(MouseEvent mouseEvent) {
@@ -70,7 +90,8 @@ public class LinguisticValuesSelectController implements Initializable {
                 alert.show();
             } else {
                 Pair<Integer, Integer> region = getValidRegion(dragStartX, dragEndX);
-                seriesLineChart.addVerticalRangeMarker(new XYChart.Data<>((double) region.getKey(), (double) region.getValue()));
+                seriesLineChart.addVerticalRangeMarker(
+                        new XYChart.Data<>((double) region.getKey(), (double) region.getValue()), currentVariableColor);
                 submitRegionsButton.setDisable(false);
                 regions.add(new Pair<>(region.getKey(), region.getValue()));
             }
@@ -92,6 +113,9 @@ public class LinguisticValuesSelectController implements Initializable {
             doneButton.setDisable(true);
             linguisticVariableTextField.setText("");
             regions = new ArrayList<>();
+            currentVariableColor = new Color(Math.random(), Math.random(), Math.random(), 1);
+            allColors.add(currentVariableColor);
+            linguisticVariableTextField.setDisable(true);
         }
     }
 
@@ -109,6 +133,7 @@ public class LinguisticValuesSelectController implements Initializable {
             doneButton.setDisable(false);
             submitRegionsButton.setDisable(true);
             seriesLineChart.setDisable(true);
+            linguisticVariableTextField.setDisable(false);
         } catch (IllegalArgumentException e) {
             Alert alert = AlertFactory.getErrorAlert("Selection error", "Selection error", e.getMessage());
             alert.show();
@@ -151,4 +176,6 @@ public class LinguisticValuesSelectController implements Initializable {
     private double dragStartX;
     private String currentLinguisticVariable;
     private List<Pair<Integer, Integer>> regions;
+    private Color currentVariableColor;
+    private List<Color> allColors;
 }
