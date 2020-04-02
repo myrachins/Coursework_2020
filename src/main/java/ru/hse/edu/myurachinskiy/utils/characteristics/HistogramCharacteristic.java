@@ -6,11 +6,13 @@ public class HistogramCharacteristic extends CharacteristicStrategy {
     public HistogramCharacteristic(List<Double> distribution) {
         super(distribution);
         h = 1.06 * std() * Math.pow(this.distribution.size(), -0.2);
-        if (h == 0) { h = 1e-5; }
     }
 
     @Override
     public double applyCharacteristicFunction(double point) {
+        if (h == 0) {
+            return distribution.get(0) == point ? 1 : 0;
+        }
         double kernelsSum = 0;
         for (Double p : distribution) {
             kernelsSum += kernel((point - p) / h);
