@@ -26,14 +26,24 @@
         </yAxis>
     </LineChartWithRectangles>
     <AnchorPane>
-        <VBox spacing="5">
-            <HBox spacing="5">
-                <TextField fx:id="linguisticVariableTextField"/>
-                <Button fx:id="addLinguisticVariableButton" text="Add" onAction="#onAddLinguisticVariable"/>
-                <Button fx:id="submitRegionsButton" text="Submit regions" onAction="#onSubmitRegions" disable="true"/>
-            </HBox>
-            <ListView fx:id="linguisticValuesListView" prefHeight="150"/>
-        </VBox>
+        <HBox spacing="70">
+            <VBox spacing="5">
+                <HBox spacing="5">
+                    <TextField fx:id="linguisticVariableTextField"/>
+                    <Button fx:id="addLinguisticVariableButton" text="Add" onAction="#onAddLinguisticVariable"/>
+                    <Button fx:id="submitRegionsButton" text="Submit regions" onAction="#onSubmitRegions" disable="true"/>
+                </HBox>
+                <ListView fx:id="linguisticValuesListView" prefHeight="150"/>
+            </VBox>
+            <VBox style="-fx-font: NORMAL 15 Tahoma;">
+                <Label text="1) Choose name for linguistic value"/>
+                <Label text="2) Press 'Add' to add linguistic value"/>
+                <Label text="3) Select regions with changes related to added linguistic value"/>
+                <Label text="4) Press 'Submit regions' after all selections"/>
+                <Label text="5) Do steps 1-4 for all linguistic values you need"/>
+                <Label text="6) Press 'Done' to go on the next page"/>
+            </VBox>
+        </HBox>
         <Button fx:id="doneButton" text="Done" onAction="#onDone" disable="true" AnchorPane.rightAnchor="0.0"/>
     </AnchorPane>
 </VBox>
