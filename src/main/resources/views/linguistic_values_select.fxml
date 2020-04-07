@@ -12,7 +12,7 @@
     <padding>
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
     </padding>
-    <Label text="Choose linguistic values for linguistic variable of series changes"
+    <Label text="Choose labels for the linguistic variable 'change of time series values'"
            style="-fx-font: NORMAL 20 Tahoma;"/>
 
     <LineChartWithRectangles fx:id="seriesLineChart" disable="true" prefHeight="700"
@@ -39,9 +39,9 @@
                 <Label text="1) Choose name for linguistic value"/>
                 <Label text="2) Press 'Add' to add linguistic value"/>
                 <Label text="3) Select regions with changes related to added linguistic value"/>
-                <Label text="4) Press 'Submit regions' after all selections"/>
-                <Label text="5) Do steps 1-4 for all linguistic values you need"/>
-                <Label text="6) Press 'Done' to go on the next page"/>
+                <Label text="4) Press 'Submit regions' after all selections are done"/>
+                <Label text="5) Repeat steps 1-4 for all linguistic values specified"/>
+                <Label text="6) Press 'Done' to go to the next processing stage"/>
             </VBox>
         </HBox>
         <Button fx:id="doneButton" text="Done" onAction="#onDone" disable="true" AnchorPane.rightAnchor="0.0"/>
