@@ -11,7 +11,7 @@
     <padding>
         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
     </padding>
-    <Label text="Choose file with CSV based data structure for further converting"
+    <Label text="Choose file with CSV data for further conversion"
            style="-fx-font: NORMAL 20 Tahoma;"/>
     <HBox spacing="20">
         <HBox spacing="5">
@@ -26,7 +26,7 @@
     </HBox>
     <TableView fx:id="csvTableView"/>
     <HBox alignment="BOTTOM_RIGHT" spacing="20">
-        <Label text="Choose column with numeric data for further symbolic-fuzzy representation"
+        <Label text="Specify column containing numeric data for symbolic-fuzzy representation"
                style="-fx-font: NORMAL 17 Tahoma;"/>
         <ComboBox fx:id="numericColumnsComboBox" disable="true"/>
         <Button fx:id="doneButton" text="Done" onAction="#onDone" disable="true"/>

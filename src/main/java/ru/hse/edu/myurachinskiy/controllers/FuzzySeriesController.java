@@ -21,12 +21,14 @@ public class FuzzySeriesController implements Initializable {
             StringBuilder stringBuilder = new StringBuilder(i + 1 + ") ");
             for (int j = 0; j < affiliations.size(); j++) {
                 if (j != 0) {
-                    stringBuilder.append(", ");
+                    stringBuilder.append("; ");
                 }
                 FuzzyAffiliation affiliation = affiliations.get(j);
+                stringBuilder.append("(");
                 stringBuilder.append(affiliation.getLinguisticValue());
-                stringBuilder.append(": ");
+                stringBuilder.append(", ");
                 stringBuilder.append(String.format("%.5f", affiliation.getAffiliationDegree()));
+                stringBuilder.append(")");
             }
             seriesListView.getItems().add(stringBuilder.toString());
         }
