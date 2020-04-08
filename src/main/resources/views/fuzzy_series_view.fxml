@@ -12,6 +12,16 @@
     </padding>
     <Label text="Result of symbolic-fuzzy representation of time series"
            style="-fx-font: NORMAL 20 Tahoma;"/>
-    <Button text="Export" onAction="#onExport"/>
+    <VBox spacing="5">
+        <AnchorPane>
+            <HBox spacing="10" alignment="CENTER">
+                <Label text="Number of elements from tail:" style="-fx-font: NORMAL 15 Tahoma;"/>
+                <TextField fx:id="tailShiftTextField" text="1" prefWidth="50"/>
+                <Button fx:id="predictButton" text="Predict" onAction="#onPredict"/>
+            </HBox>
+            <Button text="Export" onAction="#onExport" AnchorPane.rightAnchor="0.0"/>
+        </AnchorPane>
+        <TextField fx:id="predictedTextField" prefWidth="-Infinity" editable="false"/>
+    </VBox>
     <ListView fx:id="seriesListView" prefWidth="1000" prefHeight="600"/>
 </VBox>

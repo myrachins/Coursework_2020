@@ -4,11 +4,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ru.hse.edu.myurachinskiy.models.DataContext;
 import ru.hse.edu.myurachinskiy.models.FuzzyAffiliation;
+import ru.hse.edu.myurachinskiy.models.FuzzyPoint;
+import ru.hse.edu.myurachinskiy.models.FuzzyPointsSeries;
 import ru.hse.edu.myurachinskiy.utils.alerts.AlertFactory;
 
 import java.io.BufferedWriter;
@@ -23,28 +28,22 @@ public class FuzzySeriesController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         List<Double> series = DataContext.originalSeries.getSeries();
+        DataContext.fuzzyPointsSeries = new FuzzyPointsSeries();
+
         for (int i = 0; i < series.size() - 1; i++) {
             double point = series.get(i + 1) - series.get(i);
             List<FuzzyAffiliation> affiliations = DataContext.linguisticFuzzySeries.getAffiliations(point);
-            affiliations.sort((lhs, rhs) -> -Double.compare(lhs.getAffiliationDegree(), rhs.getAffiliationDegree()));
-            StringBuilder stringBuilder = new StringBuilder(i + 1 + ") ");
-            for (int j = 0; j < affiliations.size(); j++) {
-                if (j != 0) {
-                    stringBuilder.append("; ");
-                }
-                FuzzyAffiliation affiliation = affiliations.get(j);
-                stringBuilder.append("(");
-                stringBuilder.append(affiliation.getLinguisticValue());
-                stringBuilder.append(", ");
-                stringBuilder.append(String.format("%.5f", affiliation.getAffiliationDegree()));
-                stringBuilder.append(")");
-            }
-            seriesListView.getItems().add(stringBuilder.toString());
+            FuzzyPoint currentFuzzyPoint = new FuzzyPoint(affiliations);
+            DataContext.fuzzyPointsSeries.addPoint(currentFuzzyPoint);
+            seriesListView.getItems().add((i + 1) + ") " + currentFuzzyPoint.toString());
         }
 
         fileChooser = new FileChooser();
         fileChooser.setTitle("Save time series as ...");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("txt", "*.txt"));
+
+        currentTailShift = Integer.parseInt(tailShiftTextField.getText());
+        tailShiftTextField.textProperty().addListener((observable, oldValue, newValue) -> tailShiftChanged(newValue));
     }
 
     public void onExport(ActionEvent actionEvent) {
@@ -64,8 +63,32 @@ public class FuzzySeriesController implements Initializable {
         }
     }
 
+    public void tailShiftChanged(String newValue) {
+        try {
+            currentTailShift = Integer.parseInt(newValue);
+            if (currentTailShift <= 0 || currentTailShift >= DataContext.fuzzyPointsSeries.getSize()) {
+                throw new IllegalArgumentException();
+            }
+            predictButton.setDisable(false);
+        } catch (IllegalArgumentException e) {
+            predictButton.setDisable(true);
+        }
+    }
+
+    public void onPredict(ActionEvent actionEvent) {
+        FuzzyPoint predictedPoint = DataContext.fuzzyPointsSeries.predict(currentTailShift);
+        predictedTextField.setText((DataContext.fuzzyPointsSeries.getSize() + 1) + ") " + predictedPoint.toString());
+    }
+
     @FXML
-    public ListView<String> seriesListView;
+    private ListView<String> seriesListView;
+    @FXML
+    private TextField tailShiftTextField;
+    @FXML
+    private Button predictButton;
+    @FXML
+    private TextField predictedTextField;
 
     private FileChooser fileChooser;
+    private int currentTailShift;
 }
