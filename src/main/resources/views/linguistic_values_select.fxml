@@ -36,12 +36,12 @@
                 <ListView fx:id="linguisticValuesListView" prefHeight="150"/>
             </VBox>
             <VBox style="-fx-font: NORMAL 15 Tahoma;">
-                <Label text="1) Choose name for linguistic value"/>
-                <Label text="2) Press 'Add' to add linguistic value"/>
-                <Label text="3) Select regions with changes related to added linguistic value"/>
+                <Label text="1) Enter appropriate name for the linguistic value"/>
+                <Label text="2) Press 'Add' to add linguistic value to the list"/>
+                <Label text="3) Select regions with changes subjectively relevant to value added"/>
                 <Label text="4) Press 'Submit regions' after all selections are done"/>
                 <Label text="5) Repeat steps 1-4 for all linguistic values specified"/>
-                <Label text="6) Press 'Done' to go to the next processing stage"/>
+                <Label text="6) Press 'Done' to proceed to the next stage"/>
             </VBox>
         </HBox>
         <Button fx:id="doneButton" text="Done" onAction="#onDone" disable="true" AnchorPane.rightAnchor="0.0"/>
