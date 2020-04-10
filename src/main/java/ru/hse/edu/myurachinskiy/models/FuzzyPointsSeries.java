@@ -44,6 +44,23 @@ public class FuzzyPointsSeries {
         return predicted;
     }
 
+    public int index(int tailShift) {
+        if (tailShift <= 0 || tailShift >= points.size()) {
+            throw new IllegalArgumentException("Illegal value for tailShift");
+        }
+        double minDistance = -1;
+        int minDistanceIndex = -1;
+
+        for (int i = 0; i < points.size() - tailShift; ++i) {
+            double distance = distance(i, points.size() - tailShift, tailShift);
+            if (minDistance == -1 || distance < minDistance) {
+                minDistance = distance;
+                minDistanceIndex = i;
+            }
+        }
+        return minDistanceIndex;
+    }
+
     private double distance(int start1, int start2, int size) {
         double sumDistance = 0;
 

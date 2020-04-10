@@ -18,6 +18,7 @@
                 <Label text="Number of elements from tail:" style="-fx-font: NORMAL 15 Tahoma;"/>
                 <TextField fx:id="tailShiftTextField" text="1" prefWidth="50"/>
                 <Button fx:id="predictButton" text="Predict" onAction="#onPredict"/>
+                <Button fx:id="indexButton" text="Index" onAction="#onIndex"/>
             </HBox>
             <Button text="Export" onAction="#onExport" AnchorPane.rightAnchor="0.0"/>
         </AnchorPane>
