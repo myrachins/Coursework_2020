@@ -69,4 +69,77 @@ public class FuzzyPointsSeriesTest {
 
         Assert.assertEquals(fuzzyPointsSeries.predict(2).toString(), "(a, 1.00000)");
     }
+
+    @Test
+    public void testIndex1() {
+        FuzzyPointsSeries fuzzyPointsSeries = new FuzzyPointsSeries();
+
+        List<FuzzyAffiliation> affiliations1 = new ArrayList<>();
+        affiliations1.add(new FuzzyAffiliation("a", 1));
+        fuzzyPointsSeries.addPoint(new FuzzyPoint(affiliations1));
+
+        List<FuzzyAffiliation> affiliations2 = new ArrayList<>();
+        affiliations2.add(new FuzzyAffiliation("a", 1));
+        fuzzyPointsSeries.addPoint(new FuzzyPoint(affiliations2));
+
+        List<FuzzyAffiliation> affiliations3 = new ArrayList<>();
+        affiliations3.add(new FuzzyAffiliation("a", 1));
+        fuzzyPointsSeries.addPoint(new FuzzyPoint(affiliations3));
+
+        List<FuzzyAffiliation> affiliations4 = new ArrayList<>();
+        affiliations4.add(new FuzzyAffiliation("a", 1));
+        fuzzyPointsSeries.addPoint(new FuzzyPoint(affiliations4));
+
+        Assert.assertEquals(fuzzyPointsSeries.index(2), 0);
+    }
+
+    @Test
+    public void testIndex2() {
+        FuzzyPointsSeries fuzzyPointsSeries = new FuzzyPointsSeries();
+
+        List<FuzzyAffiliation> affiliations1 = new ArrayList<>();
+        affiliations1.add(new FuzzyAffiliation("a", 0));
+        fuzzyPointsSeries.addPoint(new FuzzyPoint(affiliations1));
+
+        List<FuzzyAffiliation> affiliations2 = new ArrayList<>();
+        affiliations2.add(new FuzzyAffiliation("a", 0));
+        fuzzyPointsSeries.addPoint(new FuzzyPoint(affiliations2));
+
+        List<FuzzyAffiliation> affiliations3 = new ArrayList<>();
+        affiliations3.add(new FuzzyAffiliation("a", 1));
+        fuzzyPointsSeries.addPoint(new FuzzyPoint(affiliations3));
+
+        List<FuzzyAffiliation> affiliations4 = new ArrayList<>();
+        affiliations4.add(new FuzzyAffiliation("a", 1));
+        fuzzyPointsSeries.addPoint(new FuzzyPoint(affiliations4));
+
+        Assert.assertEquals(fuzzyPointsSeries.index(1), 2);
+    }
+
+    @Test
+    public void testIndex3() {
+        FuzzyPointsSeries fuzzyPointsSeries = new FuzzyPointsSeries();
+
+        List<FuzzyAffiliation> affiliations1 = new ArrayList<>();
+        affiliations1.add(new FuzzyAffiliation("a", 1));
+        fuzzyPointsSeries.addPoint(new FuzzyPoint(affiliations1));
+
+        List<FuzzyAffiliation> affiliations2 = new ArrayList<>();
+        affiliations2.add(new FuzzyAffiliation("a", 0));
+        fuzzyPointsSeries.addPoint(new FuzzyPoint(affiliations2));
+
+        List<FuzzyAffiliation> affiliations3 = new ArrayList<>();
+        affiliations3.add(new FuzzyAffiliation("a", 1));
+        fuzzyPointsSeries.addPoint(new FuzzyPoint(affiliations3));
+
+        List<FuzzyAffiliation> affiliations4 = new ArrayList<>();
+        affiliations4.add(new FuzzyAffiliation("a", 0));
+        fuzzyPointsSeries.addPoint(new FuzzyPoint(affiliations4));
+
+        List<FuzzyAffiliation> affiliations5 = new ArrayList<>();
+        affiliations5.add(new FuzzyAffiliation("a", 1));
+        fuzzyPointsSeries.addPoint(new FuzzyPoint(affiliations5));
+
+        Assert.assertEquals(fuzzyPointsSeries.index(3), 0);
+    }
 }

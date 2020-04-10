@@ -4,6 +4,7 @@
 
 ## Structure of the project
 * `src/main/java/ru/hse/edu/myurachinskiy` - source code
+* `src/test/java/ru/hse/edu/myurachinskiy` - tests
 * `src/main/resources/views` - views
 * `pom.xml` - maven POM file
 * `readme.md`
@@ -15,7 +16,7 @@ Current program is used for symbolic-fuzzy representation of original numeric ti
    - ✅ Build symbolic-fuzzy representation of time series.
    - ✅ Export symbolic-fuzzy representation of time series.
    - ✅ Predict next change based on symbolic-fuzzy representation.
-   - 🔲 Series index based on symbolic-fuzzy representation.
+   - ✅ Series index based on symbolic-fuzzy representation.
    
 
 ## Team

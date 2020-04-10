@@ -3,10 +3,7 @@ package ru.hse.edu.myurachinskiy.controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -44,6 +41,8 @@ public class FuzzySeriesController implements Initializable {
 
         currentTailShift = Integer.parseInt(tailShiftTextField.getText());
         tailShiftTextField.textProperty().addListener((observable, oldValue, newValue) -> tailShiftChanged(newValue));
+
+        seriesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
     public void onExport(ActionEvent actionEvent) {
@@ -70,14 +69,23 @@ public class FuzzySeriesController implements Initializable {
                 throw new IllegalArgumentException();
             }
             predictButton.setDisable(false);
+            indexButton.setDisable(false);
         } catch (IllegalArgumentException e) {
             predictButton.setDisable(true);
+            indexButton.setDisable(true);
         }
     }
 
     public void onPredict(ActionEvent actionEvent) {
         FuzzyPoint predictedPoint = DataContext.fuzzyPointsSeries.predict(currentTailShift);
         predictedTextField.setText((DataContext.fuzzyPointsSeries.getSize() + 1) + ") " + predictedPoint.toString());
+    }
+
+    public void onIndex(ActionEvent actionEvent) {
+        int indexStart = DataContext.fuzzyPointsSeries.index(currentTailShift);
+        seriesListView.getSelectionModel().clearSelection();
+        seriesListView.getSelectionModel().selectRange(indexStart, indexStart + currentTailShift);
+        seriesListView.scrollTo(indexStart);
     }
 
     @FXML
@@ -88,6 +96,8 @@ public class FuzzySeriesController implements Initializable {
     private Button predictButton;
     @FXML
     private TextField predictedTextField;
+    @FXML
+    private Button indexButton;
 
     private FileChooser fileChooser;
     private int currentTailShift;
