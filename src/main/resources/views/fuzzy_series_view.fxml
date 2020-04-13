@@ -17,6 +17,8 @@
             <HBox spacing="10" alignment="CENTER">
                 <Label text="Number of elements from tail:" style="-fx-font: NORMAL 15 Tahoma;"/>
                 <TextField fx:id="tailShiftTextField" text="1" prefWidth="50"/>
+                <Label text="Forecast horizon:" style="-fx-font: NORMAL 15 Tahoma;"/>
+                <TextField fx:id="forecastHorizonTextField" text="1" prefWidth="50"/>
                 <Button fx:id="predictButton" text="Predict" onAction="#onPredict"/>
                 <Button fx:id="indexButton" text="Index" onAction="#onIndex"/>
             </HBox>
