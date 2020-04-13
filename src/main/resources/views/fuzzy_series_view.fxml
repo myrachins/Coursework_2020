@@ -24,7 +24,7 @@
             </HBox>
             <Button text="Export" onAction="#onExport" AnchorPane.rightAnchor="0.0"/>
         </AnchorPane>
-        <TextField fx:id="predictedTextField" prefWidth="-Infinity" editable="false"/>
+        <ListView fx:id="predictedListView" prefWidth="-Infinity" prefHeight="0" maxHeight="300"/>
     </VBox>
     <ListView fx:id="seriesListView" prefWidth="1000" prefHeight="600"/>
 </VBox>

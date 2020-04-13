@@ -12,6 +12,7 @@ public class AppSettings {
     public static final double START_WINDOW_HEIGHT = 700;
     public static final int AXIS_INTERVALS_NUMBER = 10;
     public static final double COLOR_OPACITY = 0.2;
+    public static final int ROW_HEIGHT_LIST_VIEW = 90;
 
     public static CharacteristicStrategy GET_CHARACTERISTIC_STRATEGY(List<Double> distribution) {
         return new HistogramCharacteristic(distribution);

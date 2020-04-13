@@ -10,6 +10,7 @@ import ru.hse.edu.myurachinskiy.models.DataContext;
 import ru.hse.edu.myurachinskiy.models.FuzzyAffiliation;
 import ru.hse.edu.myurachinskiy.models.FuzzyPoint;
 import ru.hse.edu.myurachinskiy.models.FuzzyPointsSeries;
+import ru.hse.edu.myurachinskiy.utils.AppSettings;
 import ru.hse.edu.myurachinskiy.utils.alerts.AlertFactory;
 
 import java.io.BufferedWriter;
@@ -84,8 +85,13 @@ public class FuzzySeriesController implements Initializable {
     }
 
     public void onPredict(ActionEvent actionEvent) {
-        FuzzyPoint predictedPoint = DataContext.fuzzyPointsSeries.predict(currentTailShift, currentForecastHorizon).get(0);
-        predictedTextField.setText((DataContext.fuzzyPointsSeries.getSize() + 1) + ") " + predictedPoint.toString());
+        List<FuzzyPoint> predictedPoints = DataContext.fuzzyPointsSeries.predict(currentTailShift, currentForecastHorizon);
+        predictedListView.getItems().clear();
+        for (int i = 0; i < predictedPoints.size(); i++) {
+            FuzzyPoint predictedPoint = predictedPoints.get(i);
+            predictedListView.getItems().add((DataContext.fuzzyPointsSeries.getSize() + 1 + i) + ") " + predictedPoint.toString());
+        }
+        predictedListView.setPrefHeight(predictedPoints.size() * AppSettings.ROW_HEIGHT_LIST_VIEW);
     }
 
     public void onIndex(ActionEvent actionEvent) {
@@ -100,11 +106,11 @@ public class FuzzySeriesController implements Initializable {
     @FXML
     private TextField tailShiftTextField;
     @FXML
-    public TextField forecastHorizonTextField;
+    private TextField forecastHorizonTextField;
     @FXML
     private Button predictButton;
     @FXML
-    private TextField predictedTextField;
+    private ListView<String> predictedListView;
     @FXML
     private Button indexButton;
 
