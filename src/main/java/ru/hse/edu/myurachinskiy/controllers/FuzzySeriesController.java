@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -77,7 +78,7 @@ public class FuzzySeriesController implements Initializable {
     }
 
     public void onPredict(ActionEvent actionEvent) {
-        FuzzyPoint predictedPoint = DataContext.fuzzyPointsSeries.predict(currentTailShift);
+        FuzzyPoint predictedPoint = DataContext.fuzzyPointsSeries.predict(currentTailShift, 1).get(0);
         predictedTextField.setText((DataContext.fuzzyPointsSeries.getSize() + 1) + ") " + predictedPoint.toString());
     }
 

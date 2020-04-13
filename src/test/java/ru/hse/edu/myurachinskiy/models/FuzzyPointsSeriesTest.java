@@ -20,7 +20,7 @@ public class FuzzyPointsSeriesTest {
         }
 
         for (int i = 0; i < 6; ++i) {
-            Assert.assertEquals(fuzzyPointsSeries.predict(i + 1).toString(), (new FuzzyPoint(affiliations)).toString());
+            Assert.assertEquals(fuzzyPointsSeries.predict(i + 1, 1).get(0).toString(), (new FuzzyPoint(affiliations)).toString());
         }
     }
 
@@ -44,7 +44,9 @@ public class FuzzyPointsSeriesTest {
         affiliations4.add(new FuzzyAffiliation("a", 0));
         fuzzyPointsSeries.addPoint(new FuzzyPoint(affiliations4));
 
-        Assert.assertEquals(fuzzyPointsSeries.predict(2).toString(), "(a, 0.75000)");
+        Assert.assertEquals(fuzzyPointsSeries.predict(2, 1).get(0).toString(), "(a, 0.75000)");
+        Assert.assertEquals(fuzzyPointsSeries.predict(2, 2).get(0).toString(), "(a, 1.00000)");
+        Assert.assertEquals(fuzzyPointsSeries.predict(2, 2).get(1).toString(), "(a, 0.00000)");
     }
 
     @Test
@@ -67,7 +69,35 @@ public class FuzzyPointsSeriesTest {
         affiliations4.add(new FuzzyAffiliation("a", 1));
         fuzzyPointsSeries.addPoint(new FuzzyPoint(affiliations4));
 
-        Assert.assertEquals(fuzzyPointsSeries.predict(2).toString(), "(a, 1.00000)");
+        Assert.assertEquals(fuzzyPointsSeries.predict(2, 1).get(0).toString(), "(a, 1.00000)");
+    }
+
+    @Test
+    public void testPredict3() {
+        FuzzyPointsSeries fuzzyPointsSeries = new FuzzyPointsSeries();
+
+        List<FuzzyAffiliation> affiliations1 = new ArrayList<>();
+        affiliations1.add(new FuzzyAffiliation("a", 1));
+        fuzzyPointsSeries.addPoint(new FuzzyPoint(affiliations1));
+
+        List<FuzzyAffiliation> affiliations2 = new ArrayList<>();
+        affiliations2.add(new FuzzyAffiliation("a", 0));
+        fuzzyPointsSeries.addPoint(new FuzzyPoint(affiliations2));
+
+        List<FuzzyAffiliation> affiliations3 = new ArrayList<>();
+        affiliations3.add(new FuzzyAffiliation("a", 1));
+        fuzzyPointsSeries.addPoint(new FuzzyPoint(affiliations3));
+
+        List<FuzzyAffiliation> affiliations4 = new ArrayList<>();
+        affiliations4.add(new FuzzyAffiliation("a", 0));
+        fuzzyPointsSeries.addPoint(new FuzzyPoint(affiliations4));
+
+        List<FuzzyAffiliation> affiliations5 = new ArrayList<>();
+        affiliations5.add(new FuzzyAffiliation("a", 1));
+        fuzzyPointsSeries.addPoint(new FuzzyPoint(affiliations5));
+
+        Assert.assertEquals(fuzzyPointsSeries.predict(2, 2).get(0).toString(), "(a, 0.25000)");
+        Assert.assertEquals(fuzzyPointsSeries.predict(2, 2).get(1).toString(), "(a, 0.75000)");
     }
 
     @Test
