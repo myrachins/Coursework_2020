@@ -20,27 +20,35 @@ public class FuzzyPointsSeries {
         points.add(point);
     }
 
-    public FuzzyPoint predict(int tailShift) {
+    public List<FuzzyPoint> predict(int tailShift, int forecastHorizon) {
         if (tailShift <= 0 || tailShift >= points.size()) {
             throw new IllegalArgumentException("Illegal value for tailShift");
+        }
+        if (forecastHorizon <= 0 || forecastHorizon + tailShift > points.size()) {
+            throw new IllegalArgumentException("Illegal value for forecastHorizon");
         }
         Set<String> linguisticValues = points.get(0).getLinguisticValues();
         List<FuzzyAffiliation> affiliations = linguisticValues.stream()
                 .map(value -> new FuzzyAffiliation(value, 0))
                 .collect(Collectors.toList());
-        FuzzyPoint predicted = new FuzzyPoint(affiliations);
+        List<FuzzyPoint> predicted = new ArrayList<>();
+        for (int i = 0; i < forecastHorizon; ++i) {
+            predicted.add(new FuzzyPoint(new ArrayList<>(affiliations)));
+        }
         double cumulativeInvDistance = 0;
 
-        for (int i = 0; i < points.size() - tailShift; ++i) {
+        for (int i = 0; i < points.size() - tailShift - forecastHorizon + 1; ++i) {
             double invDistance = 1 / (distance(i,points.size() - tailShift, tailShift) + 1);
-            FuzzyPoint nextPoint = new FuzzyPoint(points.get(i + tailShift));
-
             cumulativeInvDistance += invDistance;
-            nextPoint.multiply(invDistance);
-            predicted.add(nextPoint);
+            for (int offset = 0; offset < forecastHorizon; ++offset) {
+                FuzzyPoint nextPoint = new FuzzyPoint(points.get(i + tailShift + offset));
+                nextPoint.multiply(invDistance);
+                predicted.get(offset).add(nextPoint);
+            }
         }
-        predicted.multiply(1 / cumulativeInvDistance);
-
+        for (int i = 0; i < forecastHorizon; ++i) {
+            predicted.get(i).multiply(1 / cumulativeInvDistance);
+        }
         return predicted;
     }
 

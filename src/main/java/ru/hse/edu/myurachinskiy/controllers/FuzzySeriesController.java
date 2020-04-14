@@ -4,13 +4,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ru.hse.edu.myurachinskiy.models.DataContext;
 import ru.hse.edu.myurachinskiy.models.FuzzyAffiliation;
 import ru.hse.edu.myurachinskiy.models.FuzzyPoint;
 import ru.hse.edu.myurachinskiy.models.FuzzyPointsSeries;
+import ru.hse.edu.myurachinskiy.utils.AppSettings;
 import ru.hse.edu.myurachinskiy.utils.alerts.AlertFactory;
 
 import java.io.BufferedWriter;
@@ -40,7 +40,12 @@ public class FuzzySeriesController implements Initializable {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("txt", "*.txt"));
 
         currentTailShift = Integer.parseInt(tailShiftTextField.getText());
-        tailShiftTextField.textProperty().addListener((observable, oldValue, newValue) -> tailShiftChanged(newValue));
+        tailShiftTextField.textProperty().addListener((observable, oldValue, newValue)
+                -> textFieldChanged(newValue, Integer.toString(currentForecastHorizon)));
+
+        currentForecastHorizon = Integer.parseInt(forecastHorizonTextField.getText());
+        forecastHorizonTextField.textProperty().addListener((observable, oldValue, newValue)
+                -> textFieldChanged(Integer.toString(currentTailShift), newValue));
 
         seriesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
@@ -62,10 +67,13 @@ public class FuzzySeriesController implements Initializable {
         }
     }
 
-    public void tailShiftChanged(String newValue) {
+    public void textFieldChanged(String newTailShift, String newForecastHorizon) {
         try {
-            currentTailShift = Integer.parseInt(newValue);
-            if (currentTailShift <= 0 || currentTailShift >= DataContext.fuzzyPointsSeries.getSize()) {
+            currentTailShift = Integer.parseInt(newTailShift);
+            currentForecastHorizon = Integer.parseInt(newForecastHorizon);
+            if (currentTailShift <= 0
+                    || currentForecastHorizon <= 0
+                    || currentTailShift + currentForecastHorizon > DataContext.fuzzyPointsSeries.getSize()) {
                 throw new IllegalArgumentException();
             }
             predictButton.setDisable(false);
@@ -77,8 +85,13 @@ public class FuzzySeriesController implements Initializable {
     }
 
     public void onPredict(ActionEvent actionEvent) {
-        FuzzyPoint predictedPoint = DataContext.fuzzyPointsSeries.predict(currentTailShift);
-        predictedTextField.setText((DataContext.fuzzyPointsSeries.getSize() + 1) + ") " + predictedPoint.toString());
+        List<FuzzyPoint> predictedPoints = DataContext.fuzzyPointsSeries.predict(currentTailShift, currentForecastHorizon);
+        predictedListView.getItems().clear();
+        for (int i = 0; i < predictedPoints.size(); i++) {
+            FuzzyPoint predictedPoint = predictedPoints.get(i);
+            predictedListView.getItems().add((DataContext.fuzzyPointsSeries.getSize() + 1 + i) + ") " + predictedPoint.toString());
+        }
+        predictedListView.setPrefHeight(predictedPoints.size() * AppSettings.ROW_HEIGHT_LIST_VIEW);
     }
 
     public void onIndex(ActionEvent actionEvent) {
@@ -93,12 +106,15 @@ public class FuzzySeriesController implements Initializable {
     @FXML
     private TextField tailShiftTextField;
     @FXML
+    private TextField forecastHorizonTextField;
+    @FXML
     private Button predictButton;
     @FXML
-    private TextField predictedTextField;
+    private ListView<String> predictedListView;
     @FXML
     private Button indexButton;
 
     private FileChooser fileChooser;
     private int currentTailShift;
+    private int currentForecastHorizon;
 }

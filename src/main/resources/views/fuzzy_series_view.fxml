@@ -15,14 +15,16 @@
     <VBox spacing="5">
         <AnchorPane>
             <HBox spacing="10" alignment="CENTER">
-                <Label text="Number of elements from tail:" style="-fx-font: NORMAL 15 Tahoma;"/>
+                <Label text="Number of elements from present time:" style="-fx-font: NORMAL 15 Tahoma;"/>
                 <TextField fx:id="tailShiftTextField" text="1" prefWidth="50"/>
+                <Label text="Forecast horizon:" style="-fx-font: NORMAL 15 Tahoma;"/>
+                <TextField fx:id="forecastHorizonTextField" text="1" prefWidth="50"/>
                 <Button fx:id="predictButton" text="Predict" onAction="#onPredict"/>
                 <Button fx:id="indexButton" text="Index" onAction="#onIndex"/>
             </HBox>
             <Button text="Export" onAction="#onExport" AnchorPane.rightAnchor="0.0"/>
         </AnchorPane>
-        <TextField fx:id="predictedTextField" prefWidth="-Infinity" editable="false"/>
+        <ListView fx:id="predictedListView" prefWidth="-Infinity" prefHeight="0" maxHeight="300"/>
     </VBox>
     <ListView fx:id="seriesListView" prefWidth="1000" prefHeight="600"/>
 </VBox>
