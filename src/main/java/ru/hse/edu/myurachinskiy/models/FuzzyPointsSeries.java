@@ -28,11 +28,8 @@ public class FuzzyPointsSeries {
      * @return forecastHorizon predictions
      */
     public List<FuzzyPoint> predict(int begin, int end, int forecastHorizon) {
+        testRange(begin, end);
         int size = end - begin;
-        if (begin < 0 || end < 0 || begin >= points.size() || end > points.size()
-                || size >= points.size()) {
-            throw new IllegalArgumentException("Illegal values for begin and end");
-        }
         if (forecastHorizon <= 0 || forecastHorizon + size > points.size()) {
             throw new IllegalArgumentException("Illegal value for forecastHorizon");
         }
@@ -61,15 +58,14 @@ public class FuzzyPointsSeries {
         return predicted;
     }
 
-    public int index(int tailShift) {
-        if (tailShift <= 0 || tailShift >= points.size()) {
-            throw new IllegalArgumentException("Illegal value for tailShift");
-        }
+    public int index(int begin, int end) {
+        testRange(begin, end);
+        int size = end - begin;
         double minDistance = -1;
         int minDistanceIndex = -1;
 
-        for (int i = 0; i < points.size() - tailShift; ++i) {
-            double distance = distance(i, points.size() - tailShift, tailShift);
+        for (int i = 0; i < end - size; ++i) {
+            double distance = distance(i, begin, size);
             if (minDistance == -1 || distance < minDistance) {
                 minDistance = distance;
                 minDistanceIndex = i;
@@ -85,6 +81,14 @@ public class FuzzyPointsSeries {
             sumDistance += points.get(start1 + i).distance(points.get(start2 + i));
         }
         return sumDistance;
+    }
+
+    private void testRange(int begin, int end) {
+        int size = end - begin;
+        if (begin < 0 || end < 0 || begin >= points.size() || end > points.size()
+                || size >= points.size() || size <= 0) {
+            throw new IllegalArgumentException("Illegal values for begin and end");
+        }
     }
 
     private List<FuzzyPoint> points;

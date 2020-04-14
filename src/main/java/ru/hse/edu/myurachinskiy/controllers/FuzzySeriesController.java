@@ -97,7 +97,9 @@ public class FuzzySeriesController implements Initializable {
     }
 
     public void onIndex(ActionEvent actionEvent) {
-        int indexStart = DataContext.fuzzyPointsSeries.index(currentTailShift);
+        int indexStart = DataContext.fuzzyPointsSeries
+                .index(DataContext.fuzzyPointsSeries.getSize() - currentTailShift,
+                        DataContext.fuzzyPointsSeries.getSize());
         seriesListView.getSelectionModel().clearSelection();
         seriesListView.getSelectionModel().selectRange(indexStart, indexStart + currentTailShift);
         seriesListView.scrollTo(indexStart);

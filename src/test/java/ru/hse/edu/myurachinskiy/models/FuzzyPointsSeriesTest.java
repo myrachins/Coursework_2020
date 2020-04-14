@@ -120,7 +120,7 @@ public class FuzzyPointsSeriesTest {
         affiliations4.add(new FuzzyAffiliation("a", 1));
         fuzzyPointsSeries.addPoint(new FuzzyPoint(affiliations4));
 
-        Assert.assertEquals(fuzzyPointsSeries.index(2), 0);
+        Assert.assertEquals(fuzzyPointsSeries.index(2, 4), 0);
     }
 
     @Test
@@ -143,7 +143,7 @@ public class FuzzyPointsSeriesTest {
         affiliations4.add(new FuzzyAffiliation("a", 1));
         fuzzyPointsSeries.addPoint(new FuzzyPoint(affiliations4));
 
-        Assert.assertEquals(fuzzyPointsSeries.index(1), 2);
+        Assert.assertEquals(fuzzyPointsSeries.index(3, 4), 2);
     }
 
     @Test
@@ -170,6 +170,6 @@ public class FuzzyPointsSeriesTest {
         affiliations5.add(new FuzzyAffiliation("a", 1));
         fuzzyPointsSeries.addPoint(new FuzzyPoint(affiliations5));
 
-        Assert.assertEquals(fuzzyPointsSeries.index(3), 0);
+        Assert.assertEquals(fuzzyPointsSeries.index(1, 4), 0);
     }
 }
