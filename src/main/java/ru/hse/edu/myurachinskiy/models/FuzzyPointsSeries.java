@@ -85,7 +85,7 @@ public class FuzzyPointsSeries {
 
     private void testRange(int begin, int end) {
         int size = end - begin;
-        if (begin < 0 || end < 0 || begin >= points.size() || end > points.size()
+        if (begin <= 0 || end <= 0 || begin >= points.size() || end > points.size()
                 || size >= points.size() || size <= 0) {
             throw new IllegalArgumentException("Illegal values for begin and end");
         }
