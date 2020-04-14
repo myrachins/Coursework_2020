@@ -85,7 +85,9 @@ public class FuzzySeriesController implements Initializable {
     }
 
     public void onPredict(ActionEvent actionEvent) {
-        List<FuzzyPoint> predictedPoints = DataContext.fuzzyPointsSeries.predict(currentTailShift, currentForecastHorizon);
+        List<FuzzyPoint> predictedPoints = DataContext.fuzzyPointsSeries
+                .predict(DataContext.fuzzyPointsSeries.getSize() - currentTailShift,
+                        DataContext.fuzzyPointsSeries.getSize(), currentForecastHorizon);
         predictedListView.getItems().clear();
         for (int i = 0; i < predictedPoints.size(); i++) {
             FuzzyPoint predictedPoint = predictedPoints.get(i);
