@@ -83,11 +83,20 @@ public class FuzzySeriesController implements Initializable {
             FuzzyPoint predictedPoint = predictedPoints.get(i);
             predictedListView.getItems().add((currentEndRange + 1 + i) + ") " + predictedPoint.toString());
         }
-        predictedListView.setPrefHeight(predictedPoints.size() * AppSettings.ROW_HEIGHT_LIST_VIEW);
+        resizePredictListView(predictedPoints.size());
     }
 
     public void onIndex(ActionEvent actionEvent) {
-        int indexStart = DataContext.fuzzyPointsSeries.index(currentBeginRange - 1, currentEndRange);
+        List<Double> distances = DataContext.fuzzyPointsSeries.index(currentBeginRange - 1, currentEndRange);
+        int size = currentEndRange - currentBeginRange + 1;
+        predictedListView.getItems().clear();
+        for (int i = 0; i < distances.size(); ++i) {
+            predictedListView.getItems().add((i + 1) + ": (" + (i + 1) + " - " + (i + size)
+                    + String.format("), sim = %.5f", distances.get(i)));
+        }
+        resizePredictListView(distances.size());
+
+        int indexStart = distances.indexOf(Collections.min(distances));
         seriesListView.getSelectionModel().clearSelection();
         seriesListView.getSelectionModel().selectRange(indexStart, indexStart + (currentEndRange - currentBeginRange) + 1);
         seriesListView.scrollTo(indexStart);
@@ -112,6 +121,10 @@ public class FuzzySeriesController implements Initializable {
             predictButton.setDisable(true);
             indexButton.setDisable(true);
         }
+    }
+
+    private void resizePredictListView(int listSize) {
+        predictedListView.setPrefHeight(listSize * AppSettings.ROW_HEIGHT_LIST_VIEW);
     }
 
     @FXML

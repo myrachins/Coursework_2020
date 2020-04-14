@@ -58,20 +58,16 @@ public class FuzzyPointsSeries {
         return predicted;
     }
 
-    public int index(int begin, int end) {
+    public List<Double> index(int begin, int end) {
         testRange(begin, end);
         int size = end - begin;
-        double minDistance = -1;
-        int minDistanceIndex = -1;
+        List<Double> distances = new ArrayList<>();
 
         for (int i = 0; i < end - size; ++i) {
             double distance = distance(i, begin, size);
-            if (minDistance == -1 || distance < minDistance) {
-                minDistance = distance;
-                minDistanceIndex = i;
-            }
+            distances.add(distance);
         }
-        return minDistanceIndex;
+        return distances;
     }
 
     private double distance(int start1, int start2, int size) {
