@@ -30,7 +30,7 @@ public class FuzzyPointsSeries {
     public List<FuzzyPoint> predict(int begin, int end, int forecastHorizon) {
         testRange(begin, end);
         int size = end - begin;
-        if (forecastHorizon <= 0 || forecastHorizon + size > points.size()) {
+        if (forecastHorizon <= 0 || forecastHorizon + size > end) {
             throw new IllegalArgumentException("Illegal value for forecastHorizon");
         }
         Set<String> linguisticValues = points.get(0).getLinguisticValues();
