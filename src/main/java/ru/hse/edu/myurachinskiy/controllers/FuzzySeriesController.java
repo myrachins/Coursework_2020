@@ -20,10 +20,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -45,13 +42,17 @@ public class FuzzySeriesController implements Initializable {
         fileChooser.setTitle("Save time series as ...");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("txt", "*.txt"));
 
+        paramToUpdate = new HashMap<>();
+
         currentForecastHorizon = Integer.parseInt(forecastHorizonTextField.getText());
         forecastHorizonTextField.textProperty().addListener((observable, oldValue, newValue)
-                -> changeParams(() -> currentForecastHorizon = Integer.parseInt(newValue)));
+                -> changeParam(() -> currentForecastHorizon = Integer.parseInt(newValue),
+                forecastHorizonTextField.getId()));
 
         currentSubstringsNumber = Integer.parseInt(indexSubstringsNumbersTextField.getText());
         indexSubstringsNumbersTextField.textProperty().addListener((observable, oldValue, newValue)
-                -> changeParams(() -> currentSubstringsNumber = Integer.parseInt(newValue)));
+                -> changeParam(() -> currentSubstringsNumber = Integer.parseInt(newValue),
+                indexSubstringsNumbersTextField.getId()));
 
         seriesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         seriesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -61,10 +62,10 @@ public class FuzzySeriesController implements Initializable {
             int minSelected = Collections.min(selected);
             int maxSelected = Collections.max(selected);
             seriesListView.getSelectionModel().selectRange(minSelected, maxSelected);
-            changeParams(() -> {
+            changeParam(() -> {
                 currentBeginRange = minSelected + 1;
                 currentEndRange = maxSelected + 1;
-            });
+            }, seriesListView.getId());
         });
     }
 
@@ -121,10 +122,14 @@ public class FuzzySeriesController implements Initializable {
     /**
      * Changes params for prediction and index
      * @param runnable - runnable object with change (should throw IllegalArgumentException if something goes wrong)
+     * @param paramId - id of JavaFx node for which update is applied
      */
-    private void changeParams(Runnable runnable) {
+    private void changeParam(Runnable runnable, String paramId) {
         try {
-            runnable.run();
+            paramToUpdate.put(paramId, runnable);
+            for (Runnable update : paramToUpdate.values()) {
+                update.run();
+            }
             if (areParamsInvalid()) {
                 throw new IllegalArgumentException();
             }
@@ -169,4 +174,5 @@ public class FuzzySeriesController implements Initializable {
     private int currentEndRange; // inclusive, starts from 1
     private int currentForecastHorizon;
     private int currentSubstringsNumber;
+    private Map<String, Runnable> paramToUpdate;
 }
