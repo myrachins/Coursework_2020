@@ -17,6 +17,8 @@
             <HBox spacing="10" alignment="CENTER">
                 <Label text="Forecast horizon:" style="-fx-font: NORMAL 15 Tahoma;"/>
                 <TextField fx:id="forecastHorizonTextField" text="1" prefWidth="50"/>
+                <Label text="Number of substrings for index similarity:" style="-fx-font: NORMAL 15 Tahoma;"/>
+                <TextField fx:id="indexSubstringsNumbersTextField" text="1" prefWidth="50"/>
                 <Button fx:id="predictButton" text="Predict" disable="true" onAction="#onPredict"/>
                 <Button fx:id="indexButton" text="Index" disable="true" onAction="#onIndex"/>
             </HBox>
