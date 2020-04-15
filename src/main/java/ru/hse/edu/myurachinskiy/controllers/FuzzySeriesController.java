@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import ru.hse.edu.myurachinskiy.models.DataContext;
 import ru.hse.edu.myurachinskiy.models.FuzzyAffiliation;
 import ru.hse.edu.myurachinskiy.models.FuzzyPoint;
@@ -20,8 +21,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class FuzzySeriesController implements Initializable {
     @Override
@@ -43,7 +47,11 @@ public class FuzzySeriesController implements Initializable {
 
         currentForecastHorizon = Integer.parseInt(forecastHorizonTextField.getText());
         forecastHorizonTextField.textProperty().addListener((observable, oldValue, newValue)
-                -> paramsChanged(currentBeginRange, currentEndRange, newValue));
+                -> paramsChanged(currentBeginRange, currentEndRange, newValue, Integer.toString(currentSubstringsNumber)));
+
+        currentSubstringsNumber = Integer.parseInt(indexSubstringsNumbersTextField.getText());
+        indexSubstringsNumbersTextField.textProperty().addListener((observable, oldValue, newValue)
+                -> paramsChanged(currentBeginRange, currentEndRange, Integer.toString(currentForecastHorizon), newValue));
 
         seriesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         seriesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -54,7 +62,7 @@ public class FuzzySeriesController implements Initializable {
             int maxSelected = Collections.max(selected);
             seriesListView.getSelectionModel().selectRange(minSelected, maxSelected);
             paramsChanged(minSelected + 1, maxSelected + 1,
-                    Integer.toString(currentForecastHorizon));
+                    Integer.toString(currentForecastHorizon), Integer.toString(currentSubstringsNumber));
         });
     }
 
@@ -88,13 +96,19 @@ public class FuzzySeriesController implements Initializable {
 
     public void onIndex(ActionEvent actionEvent) {
         List<Double> distances = DataContext.fuzzyPointsSeries.index(currentBeginRange - 1, currentEndRange);
-        int size = currentEndRange - currentBeginRange + 1;
+        List<Pair<Integer, Double>> indDistances = IntStream.range(0, distances.size())
+                .mapToObj(i -> new Pair<>(i, distances.get(i)))
+                .sorted(Comparator.comparingDouble(Pair::getValue))
+                .collect(Collectors.toList());
+        int substringSize = currentEndRange - currentBeginRange + 1;
         predictedListView.getItems().clear();
-        for (int i = 0; i < distances.size(); ++i) {
-            predictedListView.getItems().add((i + 1) + ": (" + (i + 1) + " - " + (i + size)
-                    + String.format("), sim = %.5f", distances.get(i)));
+        for (int i = 0; i < currentSubstringsNumber; ++i) {
+            int substringInd = indDistances.get(i).getKey();
+            double substringDistance = indDistances.get(i).getValue();
+            predictedListView.getItems().add((substringInd + 1) + ": (" + (substringInd + 1) + " - "
+                    + (substringInd + substringSize) + String.format("), sim = %.5f", substringDistance));
         }
-        resizePredictListView(distances.size());
+        resizePredictListView(currentSubstringsNumber);
 
         int indexStart = distances.indexOf(Collections.min(distances));
         seriesListView.getSelectionModel().clearSelection();
@@ -102,17 +116,19 @@ public class FuzzySeriesController implements Initializable {
         seriesListView.scrollTo(indexStart);
     }
 
-    private void paramsChanged(int newBeginRange, int newEndRange, String newForecastHorizon) {
+    private void paramsChanged(int newBeginRange, int newEndRange, String newForecastHorizon, String newSubstringsNumber) {
         try {
             currentBeginRange = newBeginRange;
             currentEndRange = newEndRange;
             currentForecastHorizon = Integer.parseInt(newForecastHorizon);
+            currentSubstringsNumber = Integer.parseInt(newSubstringsNumber);
             int size = currentEndRange - currentBeginRange + 1;
             if (currentBeginRange <= 1 || currentEndRange <= 1
                     || currentBeginRange > DataContext.fuzzyPointsSeries.getSize()
                     || currentEndRange > DataContext.fuzzyPointsSeries.getSize()
                     || currentForecastHorizon <= 0 || size <= 0
-                    || size + currentForecastHorizon > currentEndRange) {
+                    || size + currentForecastHorizon > currentEndRange
+                    || currentSubstringsNumber < 0 || currentSubstringsNumber >= currentBeginRange) {
                 throw new IllegalArgumentException();
             }
             predictButton.setDisable(false);
@@ -132,6 +148,8 @@ public class FuzzySeriesController implements Initializable {
     @FXML
     private TextField forecastHorizonTextField;
     @FXML
+    public TextField indexSubstringsNumbersTextField;
+    @FXML
     private Button predictButton;
     @FXML
     private ListView<String> predictedListView;
@@ -142,4 +160,5 @@ public class FuzzySeriesController implements Initializable {
     private int currentBeginRange; // inclusive, starts from 1
     private int currentEndRange; // inclusive, starts from 1
     private int currentForecastHorizon;
+    private int currentSubstringsNumber;
 }
