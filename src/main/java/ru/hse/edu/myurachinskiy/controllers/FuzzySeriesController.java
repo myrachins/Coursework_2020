@@ -47,11 +47,11 @@ public class FuzzySeriesController implements Initializable {
 
         currentForecastHorizon = Integer.parseInt(forecastHorizonTextField.getText());
         forecastHorizonTextField.textProperty().addListener((observable, oldValue, newValue)
-                -> paramsChanged(currentBeginRange, currentEndRange, newValue, Integer.toString(currentSubstringsNumber)));
+                -> changeParams(() -> currentForecastHorizon = Integer.parseInt(newValue)));
 
         currentSubstringsNumber = Integer.parseInt(indexSubstringsNumbersTextField.getText());
         indexSubstringsNumbersTextField.textProperty().addListener((observable, oldValue, newValue)
-                -> paramsChanged(currentBeginRange, currentEndRange, Integer.toString(currentForecastHorizon), newValue));
+                -> changeParams(() -> currentSubstringsNumber = Integer.parseInt(newValue)));
 
         seriesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         seriesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -61,8 +61,10 @@ public class FuzzySeriesController implements Initializable {
             int minSelected = Collections.min(selected);
             int maxSelected = Collections.max(selected);
             seriesListView.getSelectionModel().selectRange(minSelected, maxSelected);
-            paramsChanged(minSelected + 1, maxSelected + 1,
-                    Integer.toString(currentForecastHorizon), Integer.toString(currentSubstringsNumber));
+            changeParams(() -> {
+                currentBeginRange = minSelected + 1;
+                currentEndRange = maxSelected + 1;
+            });
         });
     }
 
@@ -116,19 +118,14 @@ public class FuzzySeriesController implements Initializable {
         seriesListView.scrollTo(indexStart);
     }
 
-    private void paramsChanged(int newBeginRange, int newEndRange, String newForecastHorizon, String newSubstringsNumber) {
+    /**
+     * Changes params for prediction and index
+     * @param runnable - runnable object with change (should throw IllegalArgumentException if something goes wrong)
+     */
+    private void changeParams(Runnable runnable) {
         try {
-            currentBeginRange = newBeginRange;
-            currentEndRange = newEndRange;
-            currentForecastHorizon = Integer.parseInt(newForecastHorizon);
-            currentSubstringsNumber = Integer.parseInt(newSubstringsNumber);
-            int size = currentEndRange - currentBeginRange + 1;
-            if (currentBeginRange <= 1 || currentEndRange <= 1
-                    || currentBeginRange > DataContext.fuzzyPointsSeries.getSize()
-                    || currentEndRange > DataContext.fuzzyPointsSeries.getSize()
-                    || currentForecastHorizon <= 0 || size <= 0
-                    || size + currentForecastHorizon > currentEndRange
-                    || currentSubstringsNumber < 0 || currentSubstringsNumber >= currentBeginRange) {
+            runnable.run();
+            if (areParamsInvalid()) {
                 throw new IllegalArgumentException();
             }
             predictButton.setDisable(false);
@@ -137,6 +134,17 @@ public class FuzzySeriesController implements Initializable {
             predictButton.setDisable(true);
             indexButton.setDisable(true);
         }
+    }
+
+    private boolean areParamsInvalid() {
+        int size = currentEndRange - currentBeginRange + 1;
+
+        return currentBeginRange <= 1 || currentEndRange <= 1
+                || currentBeginRange > DataContext.fuzzyPointsSeries.getSize()
+                || currentEndRange > DataContext.fuzzyPointsSeries.getSize()
+                || currentForecastHorizon <= 0 || size <= 0
+                || size + currentForecastHorizon > currentEndRange
+                || currentSubstringsNumber < 0 || currentSubstringsNumber >= currentBeginRange;
     }
 
     private void resizePredictListView(int listSize) {
