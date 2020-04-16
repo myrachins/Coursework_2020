@@ -112,11 +112,6 @@ public class FuzzySeriesController implements Initializable {
                     + (substringInd + substringSize) + String.format("), sim = %.5f", substringDistance));
         }
         resizePredictListView(currentSubstringsNumber);
-
-        int indexStart = distances.indexOf(Collections.min(distances));
-        seriesListView.getSelectionModel().clearSelection();
-        seriesListView.getSelectionModel().selectRange(indexStart, indexStart + (currentEndRange - currentBeginRange) + 1);
-        seriesListView.scrollTo(indexStart);
     }
 
     /**
