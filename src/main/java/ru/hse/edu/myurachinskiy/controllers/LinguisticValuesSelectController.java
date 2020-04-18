@@ -49,7 +49,7 @@ public class LinguisticValuesSelectController implements Initializable {
         DataContext.linguisticFuzzySeries = new LinguisticFuzzySeries();
 
         allColors = new ArrayList<>();
-        linguisticValuesListView.setCellFactory(stringListView -> new ListCell<>(){
+        linguisticValuesListView.setCellFactory(stringListView -> new ListCell<String>(){
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
