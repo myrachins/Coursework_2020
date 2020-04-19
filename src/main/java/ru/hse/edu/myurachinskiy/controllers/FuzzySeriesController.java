@@ -57,15 +57,18 @@ public class FuzzySeriesController implements Initializable {
         seriesListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         seriesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             ObservableList<Integer> selected = seriesListView.getSelectionModel().getSelectedIndices();
-            if (selected == null || selected.isEmpty()) { return; }
+            if (selected.isEmpty()) { return; }
 
             int minSelected = Collections.min(selected);
             int maxSelected = Collections.max(selected);
-            seriesListView.getSelectionModel().selectRange(minSelected, maxSelected);
-            changeParam(() -> {
-                currentBeginRange = minSelected + 1;
-                currentEndRange = maxSelected + 1;
-            }, seriesListView.getId());
+            // if min selected < 0, it seems, that we used selectIndices(-1, ...), so we have done it automatically
+            if (minSelected >= 0) {
+                seriesListView.getSelectionModel().selectRange(minSelected, maxSelected);
+                changeParam(() -> {
+                    currentBeginRange = minSelected + 1;
+                    currentEndRange = maxSelected + 1;
+                }, seriesListView.getId());
+            }
         });
     }
 

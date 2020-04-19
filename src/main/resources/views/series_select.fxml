@@ -18,8 +18,8 @@
             <Button text="Choose file" onAction="#onSelectFile"/>
             <TextField fx:id="fileNameTextField" text="File was not selected" editable="false"/>
         </HBox>
-        <HBox spacing="5">
-            <TextField text="Separator" prefWidth="80" editable="false" alignment="BASELINE_CENTER"/>
+        <HBox spacing="5" alignment="CENTER">
+            <Label text="Separator:" style="-fx-font: NORMAL 15 Tahoma;"/>
             <ComboBox fx:id="separatorsComboBox"/>
         </HBox>
         <Button text="Load file" onAction="#onLoadFile"/>
